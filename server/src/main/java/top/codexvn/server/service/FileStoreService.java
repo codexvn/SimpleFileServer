@@ -33,9 +33,8 @@ public class FileStoreService implements ResourceLoaderAware {
 
     /**
      *
-     * @param file Multipart
-     * @return
-     * @throws IOException
+     * @param file 文件数据
+     * @return 文件对应的uuid
      */
     public String saveFile(MultipartFile file) throws IOException {
         FileStore fileStore = new FileStore();
@@ -54,10 +53,9 @@ public class FileStoreService implements ResourceLoaderAware {
 
     /**
      *
-     * @param file
-     * @param uuid
-     * @return
-     * @throws IOException
+     * @param file 文件数据
+     * @param uuid 文件对应的uuid
+     * @return 文件保存在本地的位置
      */
     private Path storeFileToLocal(MultipartFile file, String uuid) throws IOException {
         LocalDateTime now = LocalDateTime.now();
@@ -73,7 +71,7 @@ public class FileStoreService implements ResourceLoaderAware {
         File datasourceFile = new File(datasource);
         if(!datasourceFile.exists()){
             Resource resource = resourceLoader.getResource(CLASSPATH_URL_PREFIX+"templates/sqlite.db");
-            Path sqliteFilePath = null;
+            Path sqliteFilePath;
             try {
                 sqliteFilePath = resource.getFile().toPath();
                 Files.copy(sqliteFilePath,Path.of(datasource));
@@ -86,7 +84,7 @@ public class FileStoreService implements ResourceLoaderAware {
         try (ServletOutputStream outputStream = response.getOutputStream();
              BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(path.toFile()))) {
             byte[] buffer = new byte[8192];
-            int readSize = 0;
+            int readSize;
             while ((readSize = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, readSize);
             }

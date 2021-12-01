@@ -17,11 +17,17 @@ public class Knife4jConfiguration {
     public Docket defaultApi2() {
         Docket docket=new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()
-                        //.title("swagger-bootstrap-ui-demo RESTful APIs")
-                        .description("# swagger-bootstrap-ui-demo RESTful APIs")
-                        .termsOfServiceUrl("http://www.xx.com/")
+                        .title("接口文档")
+                        .description("接口文档")
                         .version("1.0")
-                        .build());
+                        .build())
+                //分组名称
+                .groupName("2.X版本")
+                .select()
+                //这里指定Controller扫描包路径
+                .apis(RequestHandlerSelectors.basePackage("top.codexvn.server.controller"))
+                .paths(PathSelectors.any())
+                .build();
         return docket;
     }
 }

@@ -1,6 +1,9 @@
 package top.codexvn.server.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,10 +34,13 @@ import java.nio.file.Path;
 @RequestMapping("file")
 @Slf4j
 @RequiredArgsConstructor
+@Api(tags = "简单文件服务器")
 public class FileController {
     private final FileStoreService fileStoreService;
     private final FileStoreMapper fileStoreMapper;
     @PostMapping(value = "uploadFile", consumes = "multipart/form-data")
+    @ApiImplicitParam(name = "file",value = "multipart/form-data 格式文件数据")
+    @ApiOperation(value = "上传文件")
     public JsonView<Object> uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
         JsonView<Object> result = null;
         file.getSize();
@@ -51,6 +57,8 @@ public class FileController {
     }
 
     @GetMapping(value = "getFile")
+    @ApiImplicitParam(name = "uuid",value = "文件对应uuid")
+    @ApiOperation(value = "通过uuid下载文件")
     public void getFile(@RequestParam String uuid, HttpServletResponse response) {
         FileStore fileStore = fileStoreMapper.getFileStoreByUUID(uuid);
         //数据库中不存在uuid对应的文件抛出410异常
@@ -64,6 +72,8 @@ public class FileController {
         }catch (URISyntaxException e){}
     }
     @GetMapping(value = "getMetaInfo")
+    @ApiImplicitParam(name = "uuid",value = "文件对应uuid")
+    @ApiOperation(value = "通过uuid获取文件元数据")
     public JsonView<FileStoreVo> getMetaInfo(@RequestParam String uuid ) {
         FileStore fileStore = fileStoreMapper.getFileStoreByUUID(uuid);
         return JsonView.getSuccessJsonView(new FileStoreVo(fileStore));
