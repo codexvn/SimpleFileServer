@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.codexvn.server.mapper.FileStoreMapper">
+    <resultMap type="top.codexvn.po.FileStore" id="fileStoreMap">
+        <id column="uuid" property="UUID"/>
+        <result column="file_size" property="fileSize"/>
+        <result column="file_type" property="fileType"/>
+        <result column="file_name" property="fileName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="url" property="url"/>
+    </resultMap>
+    <select id="getFileStoreByUUID" resultType="top.codexvn.po.FileStore">
+        select * from file_store where uuid = #{UUID}
+    </select>
+    <insert id="addFileStoreItem" parameterType="top.codexvn.po.FileStore">
+        INSERT INTO file_store VALUES (#{UUID},#{fileSize},#{fileType},#{fileName},#{createTime},#{url})
+    </insert>
+</mapper>
