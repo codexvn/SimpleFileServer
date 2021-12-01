@@ -71,9 +71,9 @@ public class FileStoreService implements ResourceLoaderAware {
         File datasourceFile = new File(datasource);
         if(!datasourceFile.exists()){
             Resource resource = resourceLoader.getResource(CLASSPATH_URL_PREFIX+"templates/sqlite.db");
-            Path sqliteFilePath;
             try {
-                sqliteFilePath = resource.getFile().toPath();
+                Path sqliteFilePath = resource.getFile().toPath();
+                if(!Files.isDirectory(datasourceFile.toPath().getParent())){Files.createDirectories(datasourceFile.toPath().getParent());}
                 Files.copy(sqliteFilePath,Path.of(datasource));
             } catch (IOException e) {
                 e.printStackTrace();
